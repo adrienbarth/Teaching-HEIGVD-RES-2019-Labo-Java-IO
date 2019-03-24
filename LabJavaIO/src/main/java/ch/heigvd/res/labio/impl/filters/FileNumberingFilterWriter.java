@@ -62,12 +62,16 @@ public class FileNumberingFilterWriter extends FilterWriter {
   public void write(int c) throws IOException {
     String current = new String("" + (char)c);
 
-    if(last.equals("\r") && current.equals("\n"))
-      return;
+
+    if (current.equals("\n") && last.equals("\r")) {
+      write(new String("" + last + current));
+    } else if (!current.equals("\r")) {
+      if(last.equals("\r"))
+        write(last);
+      write(current);
+    }
 
     last = current;
-
-    write(new String("" + (char)c));
   }
 
 }
